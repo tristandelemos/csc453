@@ -13,11 +13,15 @@ this simulator will show how that algorithm will run with jobs in the .txt file
 #define MAX_SIZE 1024
 
 char * algorithm;       // scheduling algorithm to use
-int ** matrix;
-int quantum = 1;
-FILE * file_pointer;
+int ** matrix;          // data structure to hold tuple
+int quantum = 1;        // base quantum for Round Robin
+FILE * file_pointer;    // file pointer for file
 
 int SIZE;               // how many jobs we have
+
+int cmpfunc (const void * a, const void * b) {
+   return ( *(int*)a - *(int*)b );
+}
 
 // function to print out FIFO algorithm
 int FIFO_print_out(){
@@ -55,11 +59,22 @@ int RR_print_out(){
 int put_into_array(){
     char * line = malloc(sizeof(char) * 2);
     int i = 0;
-    while(getline(line, sizeof(char) * 2, file_pointer) != -1){
-        matrix[i][0] = i;
-        matrix[i][1] = line[0];
-        matrix[i][2] = line[1]; 
+    // read everything from the file into the matrix
+    while(getline(&line, &(size_t) (sizeof(char) * 2), file_pointer) != -1){
+        matrix[i][0] = line[0];
+        matrix[i][1] = line[1]; 
+        i++;
     }
+    SIZE = i;
+
+    // sort
+    qsort(matrix, SIZE, sizeof(int) * 2, cmpfunc);
+
+    for (i = 0; i < SIZE; i++)
+    {
+        printf("run: %d, arrive: %d\n", matrix[i][0], matrix[i][1]);
+    }
+    return 0;
 }
 
 
@@ -80,8 +95,10 @@ int main(int argc, char const *argv[]){
     }
     
     // put what was in .txt file into an array array
-    
+    put_into_array();
+    fclose(file_pointer);
 
+/*
     // check for algorithm
     if(argc < 2){
         // algorithm not given, use FIFO
@@ -114,6 +131,6 @@ int main(int argc, char const *argv[]){
     for (i = 0; i < MAX_SIZE; i++){
         free(matrix[i]);
     }
-
+*/
     return 0;
 }
