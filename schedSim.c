@@ -77,6 +77,11 @@ int main(int argc, char const *argv[]){
         algorithm = argv[2];
     }
 
+    // check for quantum
+    if(argc > 5){
+        // check where q is
+    }
+
     // call whichever scheduling algorithm was chosen
     if(strcmp(algorithm, "SRTN") == 0){
         SRTN_print_out();
