@@ -15,6 +15,7 @@ this simulator will show how that algorithm will run with jobs in the .txt file
 char * algorithm;       // scheduling algorithm to use
 int ** matrix;
 int quantum = 1;
+FILE * file_pointer;
 
 int SIZE;               // how many jobs we have
 
@@ -56,7 +57,7 @@ int RR_print_out(){
 int main(int argc, char const *argv[]){
 
     // check for valid .txt file
-
+    if((file_pointer = fopen(argv[1], "r")))
 
     // malloc area for each entry in memory
     matrix = malloc(sizeof(int) * MAX_SIZE);
