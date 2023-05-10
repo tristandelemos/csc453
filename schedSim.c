@@ -9,13 +9,16 @@ this simulator will show how that algorithm will run with jobs in the .txt file
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #define MAX_SIZE 1024
 
 char * algorithm;       // scheduling algorithm to use
 int ** matrix;
+int quantum = 1;
 
 int SIZE;               // how many jobs we have
 
+// function to print out FIFO algorithm
 int FIFO_print_out(){
     // start with testing how the file will appear
 
@@ -32,6 +35,21 @@ int FIFO_print_out(){
     return 0;
 }
 
+// function to print out SRTN algorithm
+int SRTN_print_out(){
+
+
+
+    return 0;
+}
+
+// function to print out RR algorithm
+int RR_print_out(){
+
+
+
+    return 0;
+}
 
 
 
@@ -58,6 +76,19 @@ int main(int argc, char const *argv[]){
     else{
         algorithm = argv[2];
     }
+
+    // call whichever scheduling algorithm was chosen
+    if(strcmp(algorithm, "SRTN") == 0){
+        SRTN_print_out();
+    }
+    else if (strcmp(algorithm, "RR") ==  0){
+        RR_print_out();
+    }
+    else{
+        FIFO_print_out();
+    }
+    
+    
 
     // free up all memory used
     for (i = 0; i < MAX_SIZE; i++){
