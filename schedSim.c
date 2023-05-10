@@ -57,7 +57,10 @@ int RR_print_out(){
 int main(int argc, char const *argv[]){
 
     // check for valid .txt file
-    if((file_pointer = fopen(argv[1], "r")))
+    if((file_pointer = fopen(argv[1], "r")) < 0){
+        perror("fopen");
+        exit(EXIT_FAILURE);
+    }
 
     // malloc area for each entry in memory
     matrix = malloc(sizeof(int) * MAX_SIZE);
