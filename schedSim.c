@@ -60,7 +60,7 @@ int put_into_array(){
     char * line = malloc(sizeof(char) * 2);
     int i = 0;
     // read everything from the file into the matrix
-    while(getline(&line, &(size_t) (sizeof(char) * 2), file_pointer) != -1){
+    while(getline(&line, (size_t) (sizeof(char) * 2), file_pointer) != -1){
         matrix[i][0] = line[0];
         matrix[i][1] = line[1]; 
         i++;
@@ -98,7 +98,7 @@ int main(int argc, char const *argv[]){
     put_into_array();
     fclose(file_pointer);
 
-/*
+
     // check for algorithm
     if(argc < 2){
         // algorithm not given, use FIFO
@@ -131,6 +131,6 @@ int main(int argc, char const *argv[]){
     for (i = 0; i < MAX_SIZE; i++){
         free(matrix[i]);
     }
-*/
+
     return 0;
 }
