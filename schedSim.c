@@ -52,12 +52,22 @@ int RR_print_out(){
     return 0;
 }
 
+int put_into_array(){
+    char * line = malloc(sizeof(char) * 2);
+    int i = 0;
+    while(getline(line, sizeof(char) * 2, file_pointer) != -1){
+        matrix[i][0] = i;
+        matrix[i][1] = line[0];
+        matrix[i][2] = line[1]; 
+    }
+}
 
 
 int main(int argc, char const *argv[]){
 
     // check for valid .txt file
     if((file_pointer = fopen(argv[1], "r")) < 0){
+        printf("Text file is not valid. End program.\n");
         perror("fopen");
         exit(EXIT_FAILURE);
     }
@@ -78,7 +88,8 @@ int main(int argc, char const *argv[]){
         algorithm = "FIFO";
     }
     else{
-        algorithm = argv[2];
+        // not write
+        strcpy(algorithm, argv[2]);
     }
 
     // check for quantum
