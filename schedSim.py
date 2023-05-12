@@ -64,7 +64,9 @@ def RR_2(size):
         ran = 0
         if len(active_jobs) < 1:
             time += 1
+            update_active_jobs(time, active_jobs)
         else:
+            # print(job_i)
             job = active_jobs[job_i]
             while (job[0] > 0 and q > 0):
                 if len(job) == 2:
@@ -78,63 +80,28 @@ def RR_2(size):
                 ran = 1
 
             if (job[0] == 0 and ran == 1):
+                # print("arrival time:", job[1])
                 turnaround = time-job[1]
                 wait = job[2]-job[1]
                 avg_turn += turnaround
                 avg_wait += wait
                 print(f"Job {job[3]} -- Turnaround {turnaround}  Wait {wait}")
                 remaining_jobs -= 1
+                print("remaining:", remaining_jobs, "time:", time)
                 turnaround = 0
                 wait = 0
+                active_jobs.pop(job_i)
+                # print(active_jobs)
                 removed_job = True
 
+            # print(job_i)
             if removed_job:
-                pass
-            elif job_i == len(active_jobs)-1:
+                if (job_i >= len(active_jobs)):
+                    job_i = 0
+            elif job_i >= len(active_jobs)-1:
                 job_i = 0
             else:
                 job_i += 1
-
-
-
-def RR_printout(size):
-    
-    remaining_jobs = size
-    avg_wait = 0
-    avg_turn = 0
-    time = 0
-    wait = 0
-    turnaround = 0
-    job = 0
-    while (remaining_jobs != 0):
-        q = 3
-        ran = 0
-        while(matrix[job][0] > 0 and q > 0):
-            if len(matrix[job]) == 2:
-                matrix[job].append(time)
-            # print("job", job)
-            matrix[job][0] -= 1
-            time += 1
-            ran = 1
-            q -= 1
-
-        # print(time)
-        if (matrix[job][0] == 0) and (ran == 1):
-            # print(time, matrix[job][1])
-            turnaround = time-1-matrix[job][1]
-            # print("turnaround:", turnaround)
-            wait = matrix[job][2]-matrix[job][1]
-            avg_turn += turnaround
-            avg_wait += wait
-            print(f"Job {job} -- Turnaround {turnaround}  Wait {wait}")
-            remaining_jobs -= 1
-            turnaround = 0
-            wait = 0
-
-        if job < size-1:
-            job += 1
-        else:
-            job = 0
 
     avg_wait /= size
     avg_turn /= size
@@ -206,7 +173,7 @@ if __name__ == "__main__":
     """
     """
     matrix = []
-    quantum = 1
+    quantum = 3
     algorithm = "FIFO"
     main()
 
