@@ -50,7 +50,8 @@ def SRTN_printout(size):
             if len(job) == 2:
                 job.append(job_num)
                 job_num += 1
-        active_jobs.sort(key=fifo_key)
+        active_jobs.sort(key=srtn_key)
+        # print(active_jobs)
 
         
 
@@ -63,15 +64,16 @@ def SRTN_printout(size):
 
             job[0] -= 1
             time += 1
+            # print(f"time: {time} job: {job}")
 
             if(job[0] == 0):
                 turnaround = time-job[1]
                 wait = job[3]-job[1]
                 avg_turn += turnaround
                 avg_wait += wait
-                print(f"Job {job_num} -- Turnaround {turnaround}  Wait {wait}")
+                print(f"Job {job[2]} -- Turnaround {turnaround}  Wait {wait}")
                 remaining_jobs -= 1
-                print("remaining:", remaining_jobs, "time:", time)
+                # print("remaining:", remaining_jobs, "time:", time)
                 turnaround = 0
                 wait = 0
                 active_jobs.pop(0)
@@ -130,7 +132,7 @@ def RR_2(size):
                 avg_wait += wait
                 print(f"Job {job[3]} -- Turnaround {turnaround}  Wait {wait}")
                 remaining_jobs -= 1
-                print("remaining:", remaining_jobs, "time:", time)
+                # print("remaining:", remaining_jobs, "time:", time)
                 turnaround = 0
                 wait = 0
                 active_jobs.pop(job_i)
@@ -174,6 +176,7 @@ def main():
     # FIFO_printout(SIZE)
     # RR_printout(SIZE)
     RR_2(SIZE)
+    # SRTN_printout(SIZE)
 
     # sort matrix to base config
 
@@ -210,6 +213,9 @@ def fifo_queue():
 
 def fifo_key(q):
     return q[1]
+
+def srtn_key(q):
+    return q[0]
 
 
 if __name__ == "__main__":
