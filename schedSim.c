@@ -98,12 +98,12 @@ int sort_arrival_times() {
 
 
 int put_into_array(){
-    char * line = malloc(sizeof(char) * 2);
     int i = 0;
     // read everything from the file into the matrix
-    while(getline(&line, &limit, file_pointer) != -1){
+    char line[3];
+    while (fgets(line, 3, file_pointer)!= NULL){
         matrix[i][0] = line[0];
-        matrix[i][1] = line[1]; 
+        matrix[i][1] = line[2]; 
         i++;
     }
     SIZE = i;
