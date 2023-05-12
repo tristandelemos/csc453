@@ -100,7 +100,7 @@ int put_into_array(){
     //char line[3];
     char * line = malloc(sizeof(char) * 5);
     while (fgets(line, 5, file_pointer)!= NULL){
-        printf("string: %s\n line0: %s, line1: %d\n,", line, (int)line[0], (int)line[1]);
+        printf("string: %s\n line0: %d, line1: %d\n, line2: %d, line3: %d\n, line4: %d", line, line[0], line[1], line[2], line[3], line[4]);
         matrix[i][0] = (int)line[0];
         matrix[i][1] = (int)line[2]; 
         i++;
