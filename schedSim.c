@@ -36,12 +36,12 @@ int FIFO_print_out(){
     int average_wait = 0;
     for (i = 0; i < SIZE; i++){
         // compute wait time: current time - arrival 
-        wait = time - matrix[i][1];
+        wait = time - fifo_matrix[i][1];
         average_wait = average_wait + wait;
         // compute current time: run time + original current time
-        time = time + matrix[i][0];
+        time = time + fifo_matrix[i][0];
         // compute turnaround: current time(after job) - arrival
-        turnaround = time - matrix[i][1];
+        turnaround = time - fifo_matrix[i][1];
         average_turnaround = average_turnaround + turnaround;
         
         printf("Job %3d -- Turnaround %3.2f     Wait %3.2f", i, turnaround, wait);
