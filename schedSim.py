@@ -35,7 +35,9 @@ def SRTN_printout():
 
 def RR_printout():
     
-    for 
+    while (matrix.count() != 0) {
+        for
+    }
 
 
 def main():
