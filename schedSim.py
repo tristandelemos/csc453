@@ -33,11 +33,21 @@ def FIFO_printout(size):
 def SRTN_printout():
     pass
 
-def RR_printout():
+def RR_printout(size):
     
-    while (matrix.count() != 0) {
-        for
-    }
+    remaining_jobs = size
+    time = 0
+    job = 0
+    while (remaining_jobs != 0):
+        q = 3
+        while(matrix[job][0] > 0 and q > 0):
+            matrix[job][0] -= 1
+            time += 1
+
+        if job < size:
+            job += 1
+        else:
+            job = 0
 
 
 def main():
