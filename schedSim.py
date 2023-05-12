@@ -46,12 +46,17 @@ def main():
 
     # put what was in.txt file into an array array
     for x in file:
-        a = [x[0], x[2]]
+        a = [(int)(x[0]), (int)(x[2])]
         matrix.append(a)
         SIZE += 1
 
     print(matrix)
     print(SIZE)
+
+    fifo = fifo_queue()
+    print("fifo:", fifo)
+
+    FIFO_printout()
 
     # sort matrix to base config
 
@@ -81,7 +86,12 @@ def main():
     # call whichever scheduling algorithm was chosen
 
 
+def fifo_queue():
+    fifo_queue = sorted(matrix, key=fifo_key)
+    return fifo_queue
 
+def fifo_key(q):
+    return q[1]
 
 
 if __name__ == "__main__":
