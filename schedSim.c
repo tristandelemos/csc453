@@ -28,14 +28,26 @@ int cmpfunc (const void * a, const void * b) {
 int FIFO_print_out(){
     // start with testing how the file will appear
 
+    int time = 0;
     int i;
-    int arrival = 0;
-
+    int turnaround;
+    int wait;
+    int average_turnaround = 0;
+    int average_wait = 0;
     for (i = 0; i < SIZE; i++){
-        // find next highest arrival time
+        // compute wait time: current time - arrival 
+        wait = time - matrix[i][1];
+        average_wait = average_wait + wait;
+        // compute current time: run time + original current time
+        time = time + matrix[i][0];
+        // compute turnaround: current time(after job) - arrival
+        turnaround = time - matrix[i][1];
+        average_turnaround = average_turnaround + turnaround;
         
+        printf("Job %3d -- Turnaround %3.2f     Wait %3.2f", i, turnaround, wait);
     }
     
+    printf("Average -- Turnaround %3.2f     Wait %3.2f", (average_turnaround/SIZE), (average_wait/SIZE));
 
 
     return 0;
