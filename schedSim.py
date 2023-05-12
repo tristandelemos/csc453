@@ -33,21 +33,110 @@ def FIFO_printout(size):
 def SRTN_printout():
     pass
 
+
+
+def update_active_jobs(time, active_jobs):
+    for job in matrix:
+        if (job[1] == time):
+            active_jobs.append(job)
+
+def RR_2(size):
+
+    remaining_jobs = size
+    avg_wait = 0
+    avg_turn = 0
+    time = 0
+    wait = 0
+    turnaround = 0
+    job_num = 0
+
+    active_jobs = []
+    job_i = 0
+    removed_job = False
+
+    update_active_jobs(time, active_jobs)
+
+    while (remaining_jobs > 0):
+        removed_job = False
+        q = 3
+        ran = 0
+        if len(active_jobs) < 1:
+            time += 1
+        else:
+            job = active_jobs[job_i]
+            while (job[0] > 0 and q > 0):
+                if len(job) == 2:
+                    job.append(time)
+                    job.append(job_num)
+                    job_num += 1
+                q -= 1
+                job[0] -= 1
+                time += 1
+                update_active_jobs(time, active_jobs)
+                ran = 1
+
+            if (job[0] == 0 and ran == 1):
+                turnaround = time-job[1]
+                wait = job[2]-job[1]
+                avg_turn += turnaround
+                avg_wait += wait
+                print(f"Job {job[3]} -- Turnaround {turnaround}  Wait {wait}")
+                remaining_jobs -= 1
+                turnaround = 0
+                wait = 0
+                removed_job = True
+
+            if removed_job:
+                pass
+            elif job_i == len(active_jobs)-1:
+                job_i = 0
+            else:
+                job_i += 1
+
+
+
 def RR_printout(size):
     
     remaining_jobs = size
+    avg_wait = 0
+    avg_turn = 0
     time = 0
+    wait = 0
+    turnaround = 0
     job = 0
     while (remaining_jobs != 0):
         q = 3
+        ran = 0
         while(matrix[job][0] > 0 and q > 0):
+            if len(matrix[job]) == 2:
+                matrix[job].append(time)
+            # print("job", job)
             matrix[job][0] -= 1
             time += 1
+            ran = 1
+            q -= 1
 
-        if job < size:
+        # print(time)
+        if (matrix[job][0] == 0) and (ran == 1):
+            # print(time, matrix[job][1])
+            turnaround = time-1-matrix[job][1]
+            # print("turnaround:", turnaround)
+            wait = matrix[job][2]-matrix[job][1]
+            avg_turn += turnaround
+            avg_wait += wait
+            print(f"Job {job} -- Turnaround {turnaround}  Wait {wait}")
+            remaining_jobs -= 1
+            turnaround = 0
+            wait = 0
+
+        if job < size-1:
             job += 1
         else:
             job = 0
+
+    avg_wait /= size
+    avg_turn /= size
+    print(f"Average -- Turnaround {(avg_turn):3.2f}     Wait {(avg_wait):3.2f}")
 
 
 def main():
@@ -69,7 +158,9 @@ def main():
     matrix.sort(key=fifo_key)
     print("fifo:", matrix)
 
-    FIFO_printout(SIZE)
+    # FIFO_printout(SIZE)
+    # RR_printout(SIZE)
+    RR_2(SIZE)
 
     # sort matrix to base config
 
@@ -92,7 +183,8 @@ def main():
             FIFO_printout(SIZE)
 
     else:
-        FIFO_printout(SIZE)
+        # FIFO_printout(SIZE)
+        pass
 
     # check for quantum
 
