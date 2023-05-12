@@ -33,7 +33,50 @@ def FIFO_printout(size):
     print(f"Average -- Turnaround {(average_turnaround / size):3.2f}     Wait {(average_wait / size):3.2f}")
 
 def SRTN_printout(size):
-    pass
+    remaining_jobs = size
+    avg_wait = 0
+    avg_turn = 0
+    time = 0
+    wait = 0
+    turnaround = 0
+    job_num = 0
+
+    active_jobs = []
+
+    while remaining_jobs > 0:
+        # update queue and sort
+        update_active_jobs(time, active_jobs)
+        for job in active_jobs:
+            if len(job) == 2:
+                job.append(job_num)
+                job_num += 1
+        active_jobs.sort(key=fifo_key)
+
+        
+
+        if len(active_jobs) == 0:
+            time += 1
+        else:
+            job = active_jobs[0]
+            if len(job) == 3:
+                job.append(time)
+
+            job[0] -= 1
+            time += 1
+
+            if(job[0] == 0):
+                turnaround = time-job[1]
+                wait = job[3]-job[1]
+                avg_turn += turnaround
+                avg_wait += wait
+                print(f"Job {job_num} -- Turnaround {turnaround}  Wait {wait}")
+                remaining_jobs -= 1
+                print("remaining:", remaining_jobs, "time:", time)
+                turnaround = 0
+                wait = 0
+                active_jobs.pop(0)
+
+    print(f"Average -- Turnaround {(avg_turn / size):3.2f}     Wait {(avg_wait / size):3.2f}")
 
 
 
