@@ -6,7 +6,7 @@ Scheduling Simulator
 import sys
 
 
-def FIFO_printout():
+def FIFO_printout(size):
 
     time = 0
     i = 0
@@ -26,7 +26,7 @@ def FIFO_printout():
         print(f"Job {i} -- Turnaround {turnaround}  Wait {wait}")
         i += 1
 
-    print(f"Average -- Turnaround {(average_turnaround / SIZE)}     Wait {(average_wait / SIZE)}")
+    print(f"Average -- Turnaround {(average_turnaround / size)}     Wait {(average_wait / size)}")
 
 
 
@@ -40,9 +40,9 @@ def RR_printout():
 def main():
     """
     """
+    SIZE = 0
     # check for valid.txt file
     file = open("test.txt", "r")
-    SIZE = 0
 
     # put what was in.txt file into an array array
     for x in file:
@@ -56,7 +56,7 @@ def main():
     fifo = fifo_queue()
     print("fifo:", fifo)
 
-    FIFO_printout()
+    FIFO_printout(SIZE)
 
     # sort matrix to base config
 
@@ -100,7 +100,6 @@ if __name__ == "__main__":
     matrix = []
     quantum = 1
     algorithm = "FIFO"
-    SIZE = 0
     main()
 
 
