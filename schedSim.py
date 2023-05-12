@@ -2,6 +2,9 @@
 Created by Tristan de Lemos and Trenten Spicer
 Scheduling Simulator
 """
+
+import sys
+
 def main():
     """
     """
@@ -9,6 +12,8 @@ def main():
     # check for valid.txt file
     file = open("test.txt", "r")
     SIZE = 0
+
+    # put what was in.txt file into an array array
     for x in file:
         a = []
         a.append(x[0])
@@ -19,11 +24,14 @@ def main():
     print(matrix)
     print(SIZE)
 
-    # put what was in.txt file into an array array
-
     # sort matrix to base config
 
     # check for algorithm
+    numOfArgs = len(sys.argv)
+    if numOfArgs == 5:
+        #round robin
+        pass
+    
 
     # check for quantum
 
