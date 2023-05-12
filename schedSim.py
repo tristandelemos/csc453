@@ -26,7 +26,7 @@ def FIFO_printout(size):
         print(f"Job {i} -- Turnaround {turnaround}  Wait {wait}")
         i += 1
 
-    print(f"Average -- Turnaround {(average_turnaround / size)}     Wait {(average_wait / size)}")
+    print(f"Average -- Turnaround {(average_turnaround / size):3.2f}     Wait {(average_wait / size):3.2f}")
 
 
 
@@ -34,8 +34,7 @@ def SRTN_printout():
     pass
 
 def RR_printout():
-    
-    for 
+    pass
 
 
 def main():
@@ -63,24 +62,24 @@ def main():
 
     # check for algorithm
     numOfArgs = len(sys.argv)
-    if numOfArgs == 5:
-        #round robin
-        pass
-    if sys.argv[2] == "q":
-        quantum = sys.argv[3]
-    if sys.argv[2] == "p":
-        algorithm = sys.argv[3]
+    if numOfArgs > 1:
+        if sys.argv[2] == "q":
+            quantum = sys.argv[3]
+        if sys.argv[2] == "p":
+            algorithm = sys.argv[3]
 
-    if sys.argv[4] == "q":
-        quantum = sys.argv[5]
+        if sys.argv[4] == "q":
+            quantum = sys.argv[5]
 
-    if algorithm == "SRTN":
-        SRTN_printout()
-    elif algorithm == "RR" or numOfArgs >3:
-        RR_printout()
+        if algorithm == "SRTN":
+            SRTN_printout()
+        elif algorithm == "RR" or numOfArgs >3:
+            RR_printout()
+        else:
+            FIFO_printout(SIZE)
+
     else:
-        FIFO_printout()
-
+        FIFO_printout(SIZE)
 
     # check for quantum
 
