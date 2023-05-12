@@ -34,7 +34,8 @@ def SRTN_printout():
     pass
 
 def RR_printout():
-    pass
+    
+    for 
 
 
 def main():
@@ -53,8 +54,8 @@ def main():
     print(matrix)
     print(SIZE)
 
-    fifo = fifo_queue()
-    print("fifo:", fifo)
+    matrix.sort(key=fifo_key)
+    print("fifo:", matrix)
 
     FIFO_printout()
 
