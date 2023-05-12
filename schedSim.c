@@ -18,6 +18,7 @@ int ** fifo_matrix;     // data structure to hold sorted tuple
 int quantum = 1;        // base quantum for Round Robin
 FILE * file_pointer;    // file pointer for file
 
+size_t limit = 5;
 int SIZE;               // how many jobs we have
 
 int cmpfunc (const void * a, const void * b) {
@@ -30,10 +31,10 @@ int FIFO_print_out(){
 
     int time = 0;
     int i;
-    int turnaround;
-    int wait;
-    int average_turnaround = 0;
-    int average_wait = 0;
+    double turnaround;
+    double wait;
+    double average_turnaround = 0;
+    double average_wait = 0;
     for (i = 0; i < SIZE; i++){
         // compute wait time: current time - arrival 
         wait = time - fifo_matrix[i][1];
@@ -100,7 +101,7 @@ int put_into_array(){
     char * line = malloc(sizeof(char) * 2);
     int i = 0;
     // read everything from the file into the matrix
-    while(getline(&line, (size_t) (sizeof(char) * 2), file_pointer) != -1){
+    while(getline(&line, &limit, file_pointer) != -1){
         matrix[i][0] = line[0];
         matrix[i][1] = line[1]; 
         i++;
