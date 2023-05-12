@@ -17,6 +17,10 @@ def FIFO_printout(size):
     for x in matrix:
         # compute wait time: current time - arrival
         wait = time - x[1]
+        if(wait < 0):
+            # if there is a gap between previous and next job, go to next job time
+            wait = 0
+            time = x[1]
         average_wait = average_wait + wait
         # compute current time: run time + original current time
         time = time + x[0]
@@ -28,9 +32,7 @@ def FIFO_printout(size):
 
     print(f"Average -- Turnaround {(average_turnaround / size):3.2f}     Wait {(average_wait / size):3.2f}")
 
-
-
-def SRTN_printout():
+def SRTN_printout(size):
     pass
 
 
@@ -148,7 +150,8 @@ def main():
 
     # put what was in.txt file into an array array
     for x in file:
-        a = [(int)(x[0]), (int)(x[2])]
+        b = x.split()
+        a = [int(b[0]), int(b[1])]
         matrix.append(a)
         SIZE += 1
 
