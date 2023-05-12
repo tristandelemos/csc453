@@ -14,6 +14,7 @@ this simulator will show how that algorithm will run with jobs in the .txt file
 
 char * algorithm;       // scheduling algorithm to use
 int ** matrix;          // data structure to hold tuple
+int ** fifo_matrix;     // data structure to hold sorted tuple
 int quantum = 1;        // base quantum for Round Robin
 FILE * file_pointer;    // file pointer for file
 
@@ -56,6 +57,33 @@ int RR_print_out(){
     return 0;
 }
 
+int sort_arrival_times() {
+
+    int added = 0;
+    int arrival_time = 0;
+    int i = 0;
+    while (added < SIZE) {
+        //rollover for matrix
+        if (i == SIZE) {
+            i = 0;
+            arrival_time ++;
+        }
+        //check if job is at current arrival time
+        if (matrix[i][1] == arrival_time) {
+            //add job to sorted matrix
+            fifo_matrix[added] = matrix[i];
+            added ++;
+        }
+        //increment i to look at next job
+        i++;
+
+    }
+    printf("sorted\n");
+    return 0;
+
+}
+
+
 int put_into_array(){
     char * line = malloc(sizeof(char) * 2);
     int i = 0;
@@ -97,6 +125,13 @@ int main(int argc, char const *argv[]){
     // put what was in .txt file into an array array
     put_into_array();
     fclose(file_pointer);
+
+    //sort matrix to base config
+    fifo_matrix = malloc(sizeof(int) * SIZE);
+    for (i=0; i<SIZE; i++) {
+        fifo_matrix[i] = malloc(sizeof(int) * 2);
+    }
+    sort_arrival_times();
 
 
     // check for algorithm
