@@ -10,6 +10,7 @@ this simulator will show how that algorithm will run with jobs in the .txt file
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 #define MAX_SIZE 1024
 
 char * algorithm;       // scheduling algorithm to use
@@ -18,12 +19,8 @@ int ** fifo_matrix;     // data structure to hold sorted tuple
 int quantum = 1;        // base quantum for Round Robin
 FILE * file_pointer;    // file pointer for file
 
-size_t limit = 5;
 int SIZE;               // how many jobs we have
 
-int cmpfunc (const void * a, const void * b) {
-   return ( *(int*)a - *(int*)b );
-}
 
 // function to print out FIFO algorithm
 int FIFO_print_out(){
@@ -100,21 +97,23 @@ int sort_arrival_times() {
 int put_into_array(){
     int i = 0;
     // read everything from the file into the matrix
-    char line[3];
-    while (fgets(line, 3, file_pointer)!= NULL){
-        matrix[i][0] = line[0];
-        matrix[i][1] = line[2]; 
+    //char line[3];
+    char * line = malloc(sizeof(char) * 5);
+    while (fgets(line, 5, file_pointer)!= NULL){
+        printf("string: %s\n line0: %s, line1: %d\n,", line, (int)line[0], (int)line[1]);
+        matrix[i][0] = (int)line[0];
+        matrix[i][1] = (int)line[2]; 
         i++;
     }
     SIZE = i;
-
-    // sort
-    qsort(matrix, SIZE, sizeof(int) * 2, cmpfunc);
 
     for (i = 0; i < SIZE; i++)
     {
         printf("run: %d, arrive: %d\n", matrix[i][0], matrix[i][1]);
     }
+    
+    free(line);
+    
     return 0;
 }
 
@@ -129,9 +128,9 @@ int main(int argc, char const *argv[]){
     }
 
     // malloc area for each entry in memory
-    matrix = malloc(sizeof(int) * MAX_SIZE);
+    matrix = malloc(sizeof(int*) * 100);
     int i;
-    for (i = 0; i < MAX_SIZE; i++){
+    for (i = 0; i < 100; i++){
         matrix[i] = malloc(sizeof(int) * 2);
     }
     
@@ -139,8 +138,8 @@ int main(int argc, char const *argv[]){
     put_into_array();
     fclose(file_pointer);
 
-    //sort matrix to base config
-    fifo_matrix = malloc(sizeof(int) * SIZE);
+    // sort matrix to base config
+    fifo_matrix = malloc(sizeof(int*) * SIZE);
     for (i=0; i<SIZE; i++) {
         fifo_matrix[i] = malloc(sizeof(int) * 2);
     }
@@ -176,9 +175,10 @@ int main(int argc, char const *argv[]){
     
 
     // free up all memory used
-    for (i = 0; i < MAX_SIZE; i++){
+    for (i = 0; i < 100; i++){
         free(matrix[i]);
     }
+    free(matrix);
 
     return 0;
 }
