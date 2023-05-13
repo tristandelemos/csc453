@@ -266,8 +266,8 @@ def main():
         return 0
 
 
-    print(algorithm)
-    print(quantum)
+    # print(algorithm)
+    # print(quantum)
 
     if algorithm == "SRTN":
         SRTN_printout(SIZE)
