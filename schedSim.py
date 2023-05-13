@@ -1,3 +1,4 @@
+#!user/bin/env python3
 """
 Created by Tristan de Lemos and Trenten Spicer
 Scheduling Simulator

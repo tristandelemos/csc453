@@ -1,0 +1,16 @@
+Trenten Spicer
+
+This library is different from a real thread management library because it acts in a way much
+closer to forking. While each lwp is sharing most of the same memory, they run more independently
+like child processes would. Importantly, they are treated as separate processes from the view
+of the main process, and are thus kept in check with the ptable. A real thread management library
+would work more concurrently.
+
+To improve this library, a series of different schedulers could be pre-existing to choose from,
+so that the programmer is less likely to have to implement his own.
+
+
+I did not get as far into this assignment as I would have liked. Hopefully it will be the strike
+I need to not let it happen again. I have numbersmain executing the first 5 prints and yields,
+but I have not been able to resolve how to properly set up the scheduler or return to the threads
+after they yield.
