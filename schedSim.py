@@ -7,6 +7,7 @@ import sys
 
 
 def FIFO_printout(size):
+    #iterate through basic queue
 
     time = 0
     i = 0
@@ -15,6 +16,7 @@ def FIFO_printout(size):
     average_turnaround = 0
     average_wait = 0
     for x in matrix:
+        print(x)
         # compute wait time: current time - arrival
         wait = time - x[1]
         if(wait < 0):
@@ -42,6 +44,7 @@ def SRTN_printout(size):
     job_num = 0
 
     active_jobs = []
+    
 
     while remaining_jobs > 0:
         # update queue and sort
@@ -58,31 +61,51 @@ def SRTN_printout(size):
         if len(active_jobs) == 0:
             time += 1
         else:
+            # better name
             job = active_jobs[0]
+            # initial appends
             if len(job) == 3:
                 job.append(time)
+                job.append(0)
 
+            #decrement job
             job[0] -= 1
+            #increase time
             time += 1
-            # print(f"time: {time} job: {job}")
+            
+            #add post-start wait time for other processese
+            for x in active_jobs:
+                if len(x) == 5:
+                    x[4] += 1
+            
+            #remove wait time from this process
+            job[4] -= 1
 
+            #if job complete
             if(job[0] == 0):
+                #turnaround = end time - arrival time
                 turnaround = time-job[1]
-                wait = job[3]-job[1]
+                #wait = start time - arrival time + wait time
+                wait = (job[3]-job[1]) + job[4]
+                #contribute to avg
                 avg_turn += turnaround
                 avg_wait += wait
+                #output
                 print(f"Job {job[2]} -- Turnaround {turnaround}  Wait {wait}")
+                #decrement jobs
                 remaining_jobs -= 1
-                # print("remaining:", remaining_jobs, "time:", time)
+                # reset local vars
                 turnaround = 0
                 wait = 0
+                #remove from active queue
                 active_jobs.pop(0)
-
+    #avg print
     print(f"Average -- Turnaround {(avg_turn / size):3.2f}     Wait {(avg_wait / size):3.2f}")
 
 
 
 def update_active_jobs(time, active_jobs):
+    #update jobs in active queue
     for job in matrix:
         if (job[1] == time):
             active_jobs.append(job.copy())
@@ -106,29 +129,49 @@ def RR_3(size, quantum):
 
     n = 0
 
+    #initial jobs
     update_active_jobs(time, active_jobs)
 
     while (remaining_jobs > 0):
         n+=1
         # print(active_jobs)
+        # print("time:", time)
         removed_job = False
         q = quantum
         ran = 0
+        #allocate for gaps
         if len(active_jobs) < 1:
             time += 1
             update_active_jobs(time, active_jobs)
         else:
             # print(job_i)
+            #better name
             job = active_jobs[0]
             # print("current job:", job)
+            #go through quantum, ends early if job finishes
             while (job[0] > 0 and q > 0):
+                #inits
                 if len(job) == 2:
                     job.append(time)
                     job.append(job_num)
+                    job.append(0)
                     job_num += 1
+                #decrement
                 job[0] -= 1
                 q -= 1
+                #increment time
                 time += 1
+                
+                #add waits
+                for x in active_jobs:
+                    if len(x) == 5:
+                        x[4] += 1
+                
+                #remove wrong wait for this process
+                if job[0] != 0:
+                    job[4] -= 1
+                
+                #determine tiebreaker (whether job needs to be returned to queue before new jobs)
                 if q == 0 and job[0] > 0:
                     tiebreaker = True
                 else:
@@ -136,9 +179,10 @@ def RR_3(size, quantum):
                     update_active_jobs(time, active_jobs)
 
             if job[0] == 0:
-                # print("arrival time:", job[1])
+                #turnaround = end time - arrival time
                 turnaround = time-job[1]
-                wait = job[2]-job[1]
+                #wait = wait + start - arrival
+                wait = job[4] + job[2] - 1 - job[1]
                 avg_turn += turnaround
                 avg_wait += wait
                 print(f"Job {job[3]} -- Turnaround {turnaround}  Wait {wait}")
@@ -146,9 +190,11 @@ def RR_3(size, quantum):
                 # print("remaining:", remaining_jobs, "time:", time)
                 turnaround = 0
                 wait = 0
+                #remove from active queue
                 active_jobs.pop(0)
                 # print(active_jobs)
                 removed_job = True
+            #if tiebreaker, append old job first
             elif tiebreaker:
                 active_jobs.append(job.copy())
                 active_jobs.pop(0)
@@ -209,26 +255,23 @@ def main():
 
     matrix.sort(key=fifo_key)
 
-    if numOfArgs == 4:
-        if sys.argv[2] == "-q":
-            quantum = sys.argv[3]
-            algorithm == "RR"
-        elif sys.argv[2] == "-p":
-            algorithm = sys.argv[3]
-
-    if numOfArgs == 6:
-        if sys.argv[4] == "-q":
-            quantum = sys.argv[5]
-        elif sys.argv[4] == "-p":
-            algorithm = sys.argv[3]
+    if "-p" in sys.argv:
+        algorithm = sys.argv[sys.argv.index("-p")+1]
+    if "-q" in sys.argv:
+        quantum = sys.argv[sys.argv.index("-q")+1]
+        
 
     if numOfArgs == 3 or numOfArgs == 5 or numOfArgs > 6:
         print("Usage: schedSim <job-file.txt> -p <ALGORITHM> -q <QUANTUM>")
         return 0
 
+
+    print(algorithm)
+    print(quantum)
+
     if algorithm == "SRTN":
         SRTN_printout(SIZE)
-    elif algorithm == "RR" or numOfArgs >3:
+    elif algorithm == "RR":
         RR_3(SIZE, (int)(quantum))
     else:
         FIFO_printout(SIZE)
