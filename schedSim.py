@@ -85,7 +85,88 @@ def SRTN_printout(size):
 def update_active_jobs(time, active_jobs):
     for job in matrix:
         if (job[1] == time):
-            active_jobs.append(job)
+            active_jobs.append(job.copy())
+
+
+def RR_3(size):
+
+    remaining_jobs = size
+    avg_wait = 0
+    avg_turn = 0
+    time = 0
+    wait = 0
+    turnaround = 0
+    job_num = 0
+
+    active_jobs = []
+    job_i = 0
+    removed_job = False
+
+    tiebreaker = False
+
+    n = 0
+
+    update_active_jobs(time, active_jobs)
+
+    while (remaining_jobs > 0):
+        n+=1
+        # print(active_jobs)
+        removed_job = False
+        q = 3
+        ran = 0
+        if len(active_jobs) < 1:
+            time += 1
+            update_active_jobs(time, active_jobs)
+        else:
+            # print(job_i)
+            job = active_jobs[0]
+            # print("current job:", job)
+            while (job[0] > 0 and q > 0):
+                if len(job) == 2:
+                    job.append(time)
+                    job.append(job_num)
+                    job_num += 1
+                job[0] -= 1
+                q -= 1
+                time += 1
+                if q == 0 and job[0] > 0:
+                    tiebreaker = True
+                else:
+                    # print("not tiebreaker")
+                    update_active_jobs(time, active_jobs)
+
+            if job[0] == 0:
+                # print("arrival time:", job[1])
+                turnaround = time-job[1]
+                wait = job[2]-job[1]
+                avg_turn += turnaround
+                avg_wait += wait
+                print(f"Job {job[3]} -- Turnaround {turnaround}  Wait {wait}")
+                remaining_jobs -= 1
+                # print("remaining:", remaining_jobs, "time:", time)
+                turnaround = 0
+                wait = 0
+                active_jobs.pop(0)
+                # print(active_jobs)
+                removed_job = True
+            elif tiebreaker:
+                active_jobs.append(job.copy())
+                active_jobs.pop(0)
+                update_active_jobs(time, active_jobs)
+                tiebreaker = False
+            else:
+                active_jobs.append(job.copy())
+                active_jobs.pop(0)
+                
+
+        # # break
+        # if n > 40:
+        #     break
+
+    avg_wait /= size
+    avg_turn /= size
+    print(f"Average -- Turnaround {(avg_turn):3.2f}     Wait {(avg_wait):3.2f}")
+
 
 def RR_2(size):
 
@@ -175,7 +256,8 @@ def main():
 
     # FIFO_printout(SIZE)
     # RR_printout(SIZE)
-    RR_2(SIZE)
+    # RR_2(SIZE)
+    RR_3(SIZE)
     # SRTN_printout(SIZE)
 
     # sort matrix to base config
